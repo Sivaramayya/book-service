@@ -1,4 +1,8 @@
 spring:
     application:
+<<<<<<< Updated upstream
        name: book-service
 	   
+=======
+       name: book-service
+>>>>>>> Stashed changes
