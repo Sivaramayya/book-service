@@ -38,6 +38,7 @@ public class BookController {
     // Get all books  http://localhost:8080/books  GET
     @GetMapping
     public List<BookResponse> findAll() {
+    	System.out.println("just for checking");
         return bookService.findAll();
     }
 

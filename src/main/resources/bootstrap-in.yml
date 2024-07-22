@@ -1,4 +1,11 @@
+server:
+    ssl:
+       enabled: true
+       key-alias: myapp
+       key-store: classpath:myapp-keystore.p12
+       key-store-password: secret
+       key-store-type: PKCS12
 spring:
-   cloud:
-      config:
-        uri: http://localhost:8888/configserver
+  cloud:
+    config:
+      uri: http://localhost:8888/configserver
