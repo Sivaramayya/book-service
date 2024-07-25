@@ -22,58 +22,97 @@ import com.amzure.bookservice.services.BookService;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/books")
+@Tag(name = "Book Management", description = "Operations pertaining to books in the Book Service")
 public class BookController {
 
     @Autowired
     private BookService bookService;
    
-    // create a book http://localhost:8080/books  POST
+    @Operation(summary = "Create a new book", description = "Creates a new book in the library", tags = { "Book Management" })
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Book created successfully", content = @Content(schema = @Schema(implementation = BookResponse.class))),
+        @ApiResponse(responseCode = "400", description = "Invalid input")
+    })
     @PostMapping
-    public BookResponse createBook(@Valid @RequestBody BookRequest bookRequest) {
+    public BookResponse createBook(
+        @Valid @RequestBody BookRequest bookRequest) {
         return bookService.save(bookRequest);
     }
     
-    // Get all books  http://localhost:8080/books  GET
+    @Operation(summary = "Get all books", description = "Retrieve all books from the library", tags = { "Book Management" })
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Successfully retrieved list", content = @Content(schema = @Schema(implementation = BookResponse.class))),
+        @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     @GetMapping
     public List<BookResponse> findAll() {
-    	System.out.println("just for checking");
         return bookService.findAll();
     }
 
-    // Get book    http://localhost:8080/books/1 GET
+    @Operation(summary = "Get a book by ID", description = "Retrieve a book by its ID", tags = { "Book Management" })
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Successfully retrieved book", content = @Content(schema = @Schema(implementation = BookResponse.class))),
+        @ApiResponse(responseCode = "404", description = "Book not found")
+    })
     @GetMapping("/{id}")
-    public ResponseEntity<BookResponse> getBookById(@PathVariable @Min(1) Long id) {
-    	 return new ResponseEntity<>(bookService.findById(id), HttpStatus.OK);
+    public ResponseEntity<BookResponse> getBookById(
+        @PathVariable @Min(1) Long id) {
+        return new ResponseEntity<>(bookService.findById(id), HttpStatus.OK);
     }
     
-    //http://localhost:8080/books/title/C#   GET
+    @Operation(summary = "Get books by title", description = "Retrieve books by their title", tags = { "Book Management" })
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Successfully retrieved books", content = @Content(schema = @Schema(implementation = BookResponse.class))),
+        @ApiResponse(responseCode = "404", description = "Books not found")
+    })
     @GetMapping("/title/{title}")
-    public List<BookResponse> getBookByTitle(@PathVariable String title) {
+    public List<BookResponse> getBookByTitle(
+        @PathVariable String title) {
         return bookService.findByTitle(title);
     }
     
-    //http://localhost:8080/books/date-after/2024-05-27   GET
+    @Operation(summary = "Get books published after a certain date", description = "Retrieve books published after a specified date", tags = { "Book Management" })
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Successfully retrieved books", content = @Content(schema = @Schema(implementation = BookResponse.class))),
+        @ApiResponse(responseCode = "400", description = "Invalid date format")
+    })
     @GetMapping("/date-after/{date}")
     public List<BookResponse> findByPublishedDateAfter(
-            @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
+        @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
         return bookService.findByPublishedDateAfter(date);
     }
 
-    // update a book  http://localhost:8080/books  PUT
+    @Operation(summary = "Update an existing book", description = "Updates the details of an existing book", tags = { "Book Management" })
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Book updated successfully", content = @Content(schema = @Schema(implementation = BookResponse.class))),
+        @ApiResponse(responseCode = "400", description = "Invalid input"),
+        @ApiResponse(responseCode = "404", description = "Book not found")
+    })
     @PutMapping
-    
-    public BookResponse updateBook(@RequestBody BookRequest bookRequest) {
+    public BookResponse updateBook(
+        @RequestBody BookRequest bookRequest) {
         return bookService.save(bookRequest);
     }
 
-    // delete a book  http://localhost:8080/books/53 DELETE
+    @Operation(summary = "Delete a book by ID", description = "Deletes a book by its ID", tags = { "Book Management" })
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Book deleted successfully"),
+        @ApiResponse(responseCode = "404", description = "Book not found")
+    })
     @DeleteMapping("/{id}")
-    public String deleteBookById(@PathVariable Long id) {
+    public String deleteBookById(
+        @PathVariable Long id) {
         bookService.deleteBookById(id);
         return "Deleted Successfully";
     }
-    
-   
 }

@@ -1,6 +1,6 @@
 server:
     ssl:
-       enabled: true
+       enabled: false
        key-alias: myapp
        key-store: classpath:myapp-keystore.p12
        key-store-password: secret
