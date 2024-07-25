@@ -4,6 +4,10 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.amzure.bookservice.dto.requst.BookRequest;
@@ -55,8 +60,13 @@ public class BookController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping
-    public List<BookResponse> findAll() {
-        return bookService.findAll();
+    public Page<BookResponse> getAllBooks( @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortField,
+            @RequestParam(defaultValue = "asc") String sortDirection) {
+    	Sort sort = Sort.by(Sort.Direction.fromString(sortDirection), sortField);
+    	Pageable pageable = PageRequest.of(page, size, sort);
+    	return bookService.findAll(pageable);
     }
 
     @Operation(summary = "Get a book by ID", description = "Retrieve a book by its ID", tags = { "Book Management" })

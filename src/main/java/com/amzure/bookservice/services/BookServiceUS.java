@@ -8,6 +8,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.amzure.bookservice.dto.requst.BookRequest;
@@ -32,10 +34,10 @@ public class BookServiceUS implements BookService {
 		return convertEntityToResponse(bookEntity);
 	}
 
-	public List<BookResponse> findAll() {
-		return bookRepository.findAll().stream().map(this::convertEntityToResponse).collect(Collectors.toList());
+	public Page<BookResponse> findAll(Pageable pageable) {
+		return bookRepository.findAll(pageable).map(this::convertEntityToResponse);
 	}
-
+	
 	public BookResponse findById(Long id) {
 	    BookEntity bookEntity = bookRepository.findById(id)
 	        .orElseThrow(() -> new ResourceNotAvailableException("Item Not Available"));
