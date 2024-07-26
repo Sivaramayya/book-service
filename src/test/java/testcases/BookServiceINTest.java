@@ -1,6 +1,7 @@
 package testcases;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 import static org.mockito.Mockito.*;
 
 import java.time.LocalDate;
@@ -30,7 +31,7 @@ public class BookServiceINTest {
         MockitoAnnotations.openMocks(this);
         bookService = new BookServiceIN();
         bookService.bookRepository = bookRepository;
-        bookService.cashBack = 50; // Set the cashBack value for testing
+       
     }
 
     @Test
