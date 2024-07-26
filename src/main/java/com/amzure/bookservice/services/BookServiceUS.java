@@ -27,7 +27,7 @@ public class BookServiceUS implements BookService {
 	@Value("${books.cashBack}")
 	private int cashBack;
 
-	public BookResponse save(BookRequest bookRequest) {
+	public BookResponse createBook(BookRequest bookRequest) {
 		BookEntity bookEntity = new BookEntity();
 		BeanUtils.copyProperties(bookRequest, bookEntity);
 		bookEntity = bookRepository.save(bookEntity);

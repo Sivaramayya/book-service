@@ -51,7 +51,7 @@ public class BookController {
     @PostMapping
     public BookResponse createBook(
         @Valid @RequestBody BookRequest bookRequest) {
-        return bookService.save(bookRequest);
+        return bookService.createBook(bookRequest);
     }
     
     @Operation(summary = "Get all books", description = "Retrieve all books from the library", tags = { "Book Management" })
@@ -111,7 +111,7 @@ public class BookController {
     @PutMapping
     public BookResponse updateBook(
         @RequestBody BookRequest bookRequest) {
-        return bookService.save(bookRequest);
+        return bookService.createBook(bookRequest);
     }
 
     @Operation(summary = "Delete a book by ID", description = "Deletes a book by its ID", tags = { "Book Management" })

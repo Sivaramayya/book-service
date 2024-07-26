@@ -24,15 +24,12 @@ import com.amzure.bookservice.repositories.BookRepository;
 @Service
 public class BookServiceIN implements BookService {
 	@Autowired
-	private BookRepository bookRepository;
-	
-	@Autowired
-	private RestTemplate  restTemplate;
-	
-	@Value("${books.cashBack}")
-	private int cashBack;
+	public BookRepository bookRepository;
 
-	public BookResponse save(BookRequest bookRequest) {
+	@Value("${books.cashBack}")
+	public int cashBack;
+
+	public BookResponse createBook(BookRequest bookRequest) {
 		BookEntity bookEntity = new BookEntity();
 		BeanUtils.copyProperties(bookRequest, bookEntity);
 		bookEntity = bookRepository.save(bookEntity);
@@ -66,7 +63,7 @@ public class BookServiceIN implements BookService {
 	public BookResponse convertEntityToResponse(BookEntity bookEntity) {
 		BookResponse bookResponse = new BookResponse();
 		BeanUtils.copyProperties(bookEntity, bookResponse);
-		bookResponse.setCashBack(cashBack);
+		//bookResponse.setCashBack(cashBack);
 		return bookResponse;
 	}
 
